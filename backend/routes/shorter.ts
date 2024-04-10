@@ -2,7 +2,6 @@ import express from 'express';
 import Link from '../models/link';
 import {Links} from '../types';
 
-
 const shorterRouter = express.Router();
 
 shorterRouter.post('/', async (req, res, next) => {
