@@ -12,11 +12,25 @@ shorterRouter.post('/', async (req, res, next) => {
 
     if (!url) return res.status(400).send({error: "You should send url to make work this service."});
 
-    const  random = crypto.randomUUID();
-    const splitted = random.split('-');
+    let random = crypto.randomUUID();
+    let splited = random.split('-');
+    const links: Links[] = await Link.find();
+    const filtered = links.filter(link => link.shortUrl === splited[0]);
+
+    if (filtered.length > 0) {
+      while (true) {
+        const newRandom = crypto.randomUUID();
+        const newSplitted = newRandom.split('-');
+        const newFiltered = links.filter(link => link.shortUrl === newSplitted[0]);
+        if (newFiltered.length < 1) {
+          splited = newSplitted;
+          break;
+        }
+      }
+    }
 
     const linkData = {
-      shortUrl: splitted[0],
+      shortUrl: splited[0],
       originalUrl: url
     }
     const link = new Link(linkData);
