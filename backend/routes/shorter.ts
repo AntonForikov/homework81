@@ -1,6 +1,5 @@
 import express from 'express';
 import Link from '../models/link';
-import {ObjectId} from 'mongodb';
 import {Links} from '../types';
 
 
@@ -51,21 +50,13 @@ shorterRouter.get('/', async (req, res, next) => {
   }
 });
 
-shorterRouter.get('/:id', async (req, res, next) => {
+shorterRouter.get('/:shortUrl', async (req, res, next) => {
   try {
-    let _id: ObjectId;
-
-    try {
-      _id = new ObjectId(req.params.id);
-    } catch (e) {
-      return res.status(404).send({error: 'Wrong ObjectId.'});
-    }
-
-    const link: Links | null = await Link.findOne({_id});
+    const link: Links | null = await Link.findOne({shortUrl: req.params.shortUrl});
 
     if (!link) return res.status(404).send({error: 'Not found'});
 
-    res.send(link);
+    return res.status(301).redirect(link.originalUrl);
 
   } catch (e) {
     next(e);
