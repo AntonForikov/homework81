@@ -25,8 +25,8 @@ const Home = () => {
     } else {
       try {
         setLoading(true);
-        const {data} = await axiosApi.post('/links', url);
-        console.log(data);
+        const {data} = await axiosApi.post<UrlFromAPI>('/links', url);
+        setUrl({url: ''});
         setUrlApi(data);
       } catch (e) {
         console.log(e);
@@ -35,6 +35,7 @@ const Home = () => {
       }
     }
   };
+
   return (
     <Grid container maxWidth={700} margin='auto' marginTop={30} direction='column' alignItems='center'>
       <Typography variant='h3'>Shorten your link!</Typography>
@@ -50,6 +51,7 @@ const Home = () => {
         variant='contained'
         color='success'
         onClick={submitUrl}
+        disabled={loading}
       >
         Shorten!
       </Button>
