@@ -55,8 +55,7 @@ shorterRouter.get('/:shortUrl', async (req, res, next) => {
 
     if (!link) return res.status(404).send({error: 'Not found'});
 
-    return res.status(301).redirect(link.originalUrl);
-
+    return res.redirect(301, link.originalUrl);
   } catch (e) {
     next(e);
   }
